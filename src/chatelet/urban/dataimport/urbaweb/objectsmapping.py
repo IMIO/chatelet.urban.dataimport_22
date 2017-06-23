@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from imio.urban.dataimport.urbaweb.mappers import LicenceFactory, \
+from chatelet.urban.dataimport.urbaweb.mappers import LicenceFactory, \
     PortalTypeMapper, IdMapper, ReferenceMapper, WorklocationMapper, ObservationsMapper, \
     CompletionStateMapper, ContactFactory, ContactNameMapper, \
     ContactTitleMapper, ContactSreetMapper, ContactNumberMapper, ContactPhoneMapper, \
@@ -19,7 +19,7 @@ from imio.urban.dataimport.urbaweb.mappers import LicenceFactory, \
     OpinionMakersMapper, DocumentsFactory, DocumentsMapper, AskOpinionsMapper, AskOpinionTableMapper, LinkedInquiryMapper, \
     AdditionalContactMapper, AdditionalContactIdMapper, AdditionalContactTitleMapper, EnvLicenceSubjectMapper, \
     EnvRubricsMapper, DocumentFileMapper, DocumentIdMapper, SuspensionsMapper, SuspensionEventTypeMapper, SuspensionEventReasonMapper, \
-    SuspensionEventIdMapper, SuspensionEventFactory
+    SuspensionEventIdMapper, SuspensionEventFactory, ArchitectMapper
 
 from imio.urban.dataimport.access.mapper import AccessSimpleMapper as SimpleMapper
 
@@ -38,12 +38,12 @@ OBJECTS_NESTING = [
             ('INQUIRY EVENT', [
                 ('CLAIMANT', []),
             ]),
-            ('ASK OPINION EVENTS', []),
+            # ('ASK OPINION EVENTS', []),
             ('SECOND RW EVENT', []),
             ('DECISION EVENT', []),
-            ('IMPLANTATION EVENT', []),
+            # ('IMPLANTATION EVENT', []),
             # ('SUSPENSION EVENT', []),
-            ('DOCUMENTS', []),
+            # ('DOCUMENTS', []),
         ],
     ),
 ]
@@ -75,7 +75,7 @@ FIELDS_MAPPINGS = {
             },
 
             PortalTypeMapper: {
-                'from': ('Rec', 'Art127'),
+                'from': ('Rec', 'Art127', 'Cle_Urba', 'Classe'),
                 'to': ('portal_type', 'folderCategory',)
             },
 
@@ -94,7 +94,7 @@ FIELDS_MAPPINGS = {
             },
 
             ReferenceMapper: {
-                'from': 'Numero',
+                'from': ('Numero', 'Rec', 'Classe', 'Cle_Urba'),
                 'to': 'reference',
             },
 
@@ -139,7 +139,7 @@ FIELDS_MAPPINGS = {
                 'KEYS': ('Cle_Urba', 'Cle_Serv'),
                 'mappers': {
                     AskOpinionsMapper: {
-                        'from': ('Org1', 'Org3', 'Org4', 'Org5', 'Org6', 'Org7', 'Org8', 'Org9', 'Org10'),
+                        'from': ('Org1', 'Org2', 'Org3', 'Org4', 'Org5', 'Org6', 'Org7', 'Org8', 'Org9', 'Org10'),
                         'to': 'solicitOpinionsTo',
                     }
                 }
@@ -155,11 +155,11 @@ FIELDS_MAPPINGS = {
                 'to': 'locationTechnicalConditions',
             },
 
-#            ArchitectMapper: {
-#                'allowed_containers': ['BuildLicence'],
-#                'from': ('NomArchitecte',),
-#                'to': ('architects',)
-#            },
+            ArchitectMapper: {
+                'allowed_containers': ['BuildLicence'],
+                'from': ('A_Nom', ),
+                'to': ('architects',)
+            },
 
 #            GeometricianMapper: {
 #                'allowed_containers': ['ParcelOutLicence'],
@@ -549,10 +549,11 @@ FIELDS_MAPPINGS = {
                             'from': 'RECTel',
                             'to': 'phone',
                         },
-                        {
-                            'from': 'RecRemarque',
-                            'to': 'claimingText',
-                        },
+                        # don't exist for Chatelet
+                        # {
+                        #     'from': 'RecRemarque',
+                        #     'to': 'claimingText',
+                        # },
                     ),
 
                     ClaimantTitleMapper: {
@@ -644,7 +645,7 @@ FIELDS_MAPPINGS = {
             },
 
             DecisionEventNotificationDateMapper: {
-                'from': 'Notifica',
+                'from': ('Notifica', 'Autorisa', 'Refus', 'TutAutorisa', 'TutRefus', ),
                 'to': 'eventDate',
             }
         },

@@ -6,8 +6,8 @@ VALUES_MAPS = {
 
 'type_map': table({
 'header'  : ['portal_type',         'foldercategory', 'abreviation'],
-'B'       : ['BuildLicence',        'uap',            ''],
-'U'       : ['',                    '',               'PU'],  # permis uniques, pas encore dans urban
+'B'       : ['BuildLicence',        'uap',            'PU'],
+'U'       : ['',                    '',               'PUN'],  # permis uniques, pas encore dans urban
 'Autre'   : ['MiscDemand',          'env',            'E'],  # ancien dossier environnement
 'Classe 1': ['EnvClassOne',         '',               'E1'],
 'Classe 2': ['EnvClassTwo',         '',               'E2'],
@@ -18,6 +18,8 @@ VALUES_MAPS = {
 '2'       : ['UrbanCertificateTwo', '',               'CU1'],
 'A'       : ['MiscDemand',          'apct',           'DD'],
 'Z'       : ['MiscDemand',          'apct',           'DD'],
+'#'       : ['',                    '',               ''], # invalid folder : ignore
+'0'       : ['',                    '',               ''], # invalid folder : ignore
 }),
 
 # type de permis, se baser sur la colonne "Rec":
