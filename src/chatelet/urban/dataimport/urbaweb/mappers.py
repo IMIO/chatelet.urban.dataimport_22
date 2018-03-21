@@ -108,6 +108,10 @@ class WorklocationMapper(Mapper):
         num = self.getData('C_Num')
         noisy_words = set(('d', 'du', 'de', 'des', 'le', 'la', 'les', 'à', ',', 'rues', 'terrain', 'terrains', 'garage', 'magasin', 'entrepôt'))
         raw_street = self.getData('C_Adres')
+        if num and num[0] == '#':
+            return {}
+        if raw_street and raw_street[0] == '#':
+            return {}
         if raw_street.endswith(')'):
             raw_street = raw_street[:-5]
         street = cleanAndSplitWord(raw_street)
@@ -365,15 +369,15 @@ class ErrorsMapper(FinalMapper):
                 data = error.data
                 if 'streets' in error.message:
                     error_trace.append('<p>adresse : %s</p>' % data['address'])
-                elif 'notaries' in error.message:
+                if 'notaries' in error.message:
                     error_trace.append('<p>notaire : %s %s %s</p>' % (data['title'], data['firstname'], data['name']))
-                elif 'architects' in error.message:
+                if 'architects' in error.message:
                     error_trace.append('<p>architecte : %s</p>' % data['raw_name'])
-                elif 'geometricians' in error.message:
+                if 'geometricians' in error.message:
                     error_trace.append('<p>géomètre : %s</p>' % data['raw_name'])
-                elif 'parcelling' in error.message:
+                if 'parcelling' in error.message:
                     error_trace.append('<p>lotissement : %s %s, autorisé le %s</p>' % (data['approval date'], data['city'], data['auth_date']))
-                elif 'article' in error.message.lower():
+                if 'article' in error.message.lower():
                     error_trace.append('<p>Articles de l\'enquête : %s</p>' % (data['articles']))
                 if 'pca found' in error.message.lower():
                     error_trace.append('<p>PCA : %s</p>' % (data["title"]))
@@ -575,12 +579,10 @@ class ParcelDataMapper(SubQueryMapper):
         return self.getData('Section', line=line).upper()
 
     def getDivision(self, line):
-        key_value = self.getData('Division', line)
-        db_query = "Select Num_D from DIVISIONS Where CLEF = '%s'" % key_value
-        try:
-            division = self._query(db_query).next()[0]
-            return division
-        except StopIteration:
+        if self.getData('Division', line):
+            division_map = self.getValueMapping('division_map')
+            return division_map.get(self.getData('Division', line))
+        else:
             return
 
 #

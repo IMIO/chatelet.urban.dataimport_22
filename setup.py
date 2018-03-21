@@ -39,6 +39,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'imio.urban.dataimport',
+        'collective.fingerpointing'
     ],
     extras_require={
         'test': [
